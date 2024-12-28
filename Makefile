@@ -26,7 +26,7 @@ endif
 	@VERSION=$(VERSION) nfpm package --packager deb --target .
 
 .phony: rpm
-rpm: build
+rpm: ghostty-$(VERSION)/zig-out/bin/ghostty
 ifeq ($(GITLAB_CI),)
 ifeq ($(shell which nfpm),)
 	@echo "Need to install nFPM first..."
@@ -41,7 +41,7 @@ endif
 # see https://gist.github.com/APTy/9a9eb218f68bc0b4beb133b89c9def14
 
 .phony: apk
-apk: build
+apk: ghostty-$(VERSION)/zig-out/bin/ghostty
 ifeq ($(GITLAB_CI),)
 ifeq ($(shell which nfpm),)
 	@echo "Need to install nFPM first..."
