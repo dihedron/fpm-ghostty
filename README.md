@@ -1,10 +1,10 @@
 # fpm-ghostty
 
-A simple Makefile to create `.deb` and `.rpm` packages of the ghostty shell.
+A simple Makefile to create `.deb` and `.rpm` packages of the ghostty terminal emulator.
 
 ## Building a [deb|rpm] package
 
-In order to build the package for the latest version of the ghostty shell for Ubuntu or Debian based Linux distributions, run the Makefile as follows:
+In order to build the package for the latest version of the ghostty terminal emulator for Ubuntu or Debian based Linux distributions, run the Makefile as follows:
 
 ```bash
 $> make build deb
