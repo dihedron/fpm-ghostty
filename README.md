@@ -10,7 +10,7 @@ In order to build the package for the latest version of the ghostty terminal emu
 $> make build deb
 ```
 
-The `build` command builds the binary; the following `deb` command packages it and all other intergration files as a DEB archive.
+The `build` target builds the binary; the following `deb` target packages it and all other integration files into a DEB archive.
 
 To build an RPM package, after having built the binary (see `make build` above) run the following:
 
@@ -24,7 +24,7 @@ To create an APK package (for Alpine) run:
 $> make apk
 ```
 
-The makefile will automatically download the sources from GitHub, build the application using the zig compiler and package it.
+The makefile will automatically download the sources from GitHub, build the terminal emulator application using the zig compiler and package it.
 
 To clean all packages and downloaded files run `make clean`.
 
