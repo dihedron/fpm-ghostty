@@ -1,10 +1,10 @@
-# fpm-zig
+# fpm-ghostty
 
-A simple Makefile to create `.deb` and `.rpm` packages of the minisign signature verification tool.
+A simple Makefile to create `.deb` and `.rpm` packages of the ghostty shell.
 
 ## Building a [deb|rpm] package
 
-In order to build the package for the latest verion of the minisign tool for Ubuntu or Debian based Linux distributions, run the Makefile as follows:
+In order to build the package for the latest verion of the ghostty shell for Ubuntu or Debian based Linux distributions, run the Makefile as follows:
 
 ```bash
 $> make deb
@@ -22,7 +22,7 @@ To create an APK package (for Alpine) run:
 $> make apk
 ```
 
-The makefile will automatically download the `tar.gz` package from GitHub and repackage it.
+The makefile will automatically download the sources from GitHub, build the application and package it.
 
 To clean all packages and downloaded files run `make clean`.
 

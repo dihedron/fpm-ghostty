@@ -3,5 +3,4 @@
 *.deb
 *.rpm
 *.apk
-minisign-linux/
-*.minisig
+ghostty-*/

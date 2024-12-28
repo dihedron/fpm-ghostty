@@ -1,76 +1,61 @@
-VERSION=$(shell curl -sI https://github.com/jedisct1/minisign/releases/latest | grep -i Location | cut -d" " -f2 | grep -Eo '[0-9]+\.[0-9]+')
-PACKAGE_DOWNLOAD_URL=https://github.com/jedisct1/minisign/releases/download/$(VERSION)/minisign-$(VERSION)-linux.tar.gz
-SIGNATURE_DOWNLOAD_URL=https://github.com/jedisct1/minisign/releases/download/$(VERSION)/minisign-$(VERSION)-linux.tar.gz.minisig
-SIGNATURE=RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3
+VERSION=1.0.0
+DOWNLOAD_URL=https://github.com/ghostty-org/ghostty/archive/refs/tags/v$(VERSION).tar.gz
 
+v$(VERSION).tar.gz:
+	@wget $(DOWNLOAD_URL)
 
+.phony: download
+download: v$(VERSION).tar.gz
+	@rm -rf ghostty-$(VERSION)/
+	@tar xvf v$(VERSION).tar.gz 2>&1 > /dev/null
 
-minisign-$(VERSION)-linux.tar.gz:
-	@wget $(PACKAGE_DOWNLOAD_URL)
-	@wget $(SIGNATURE_DOWNLOAD_URL)
-
-.phony: latest
-latest:
-	@echo "Latest minisign version is $(VERSION)"
-
-.phony: verify
-verify:
-ifeq ($(shell which minisign),)
-	@echo "Please install minisign to perform signature verification"
-else
-	@minisign -Vm minisign-$(VERSION)-linux.tar.gz -P $(SIGNATURE)
-endif
-
-.phony: setup-tools
-setup-tools:
-	@go install github.com/goreleaser/nfpm/v2/cmd/nfpm@latest
+.phony: build
+build: download
+	@echo -n "Build ghostty $(VERSION) "
+	@cd ghostty-$(VERSION) && zig build -Doptimize=ReleaseFast && cd -
 
 .phony: deb
-deb: minisign-$(VERSION)-linux.tar.gz verify
+deb: ghostty-$(VERSION)/zig-out/bin/ghostty
 ifeq ($(GITLAB_CI),)
 ifeq ($(shell which nfpm),)
 	@echo "Need to install nFPM first..."
 	@go install github.com/goreleaser/nfpm/v2/cmd/nfpm@latest
 endif
 endif
-	@rm -rf minisign-linux/
-	@tar xvf minisign-$(VERSION)-linux.tar.gz 2>&1 > /dev/null
-	@echo -n "Create minisign $(VERSION) "
+	@echo -n "Package ghostty $(VERSION) "
 	@VERSION=$(VERSION) nfpm package --packager deb --target .
-	@rm -rf minisign-linux/
 
 .phony: rpm
-rpm: minisign-$(VERSION)-linux.tar.gz verify
+rpm: build
 ifeq ($(GITLAB_CI),)
 ifeq ($(shell which nfpm),)
 	@echo "Need to install nFPM first..."
 	@go install github.com/goreleaser/nfpm/v2/cmd/nfpm@latest
 endif
 endif
-	@rm -rf minisign-linux/
-	@tar xvf minisign-$(VERSION)-linux.tar.gz 2>&1 > /dev/null
-	@echo -n "Create minisign $(VERSION) "
-	@VERSION=$(VERSION) nfpm package --packager rpm --target .
-	@rm -rf minisign-linux/
+	@echo -n "Package ghostty $(VERSION) "
+	@VERSION=$(VERSION) nfpm package --packager deb --target .
 
 
 # TODO: run a cleanup task removing go/ only once:
 # see https://gist.github.com/APTy/9a9eb218f68bc0b4beb133b89c9def14
 
 .phony: apk
-apk: minisign-$(VERSION)-linux.tar.gz verify
+apk: build
 ifeq ($(GITLAB_CI),)
 ifeq ($(shell which nfpm),)
 	@echo "Need to install nFPM first..."
 	@go install github.com/goreleaser/nfpm/v2/cmd/nfpm@latest
 endif
 endif
-	@rm -rf minisign-linux/
-	@tar xvf minisign-$(VERSION)-linux.tar.gz 2>&1 > /dev/null
-	@echo -n "Create minisign $(VERSION) "
-	@VERSION=$(VERSION) nfpm package --packager apk --target .
-	@rm -rf minisign-linux/
+	@echo -n "Package ghostty $(VERSION) "
+	@VERSION=$(VERSION) nfpm package --packager deb --target .
 
 .phony: clean
 clean:
-	@rm -rf *.deb *.rpm *.apk *.tar.gz* minisign-linux/ *.minisig
+	@rm -rf *.deb *.rpm *.apk *.tar.gz* ghostty-$(VERSION)/
+
+.phony: setup-tools
+setup-tools:
+	@go install github.com/goreleaser/nfpm/v2/cmd/nfpm@latest
+	@sudo apt install libgtk-4-dev libadwaita-1-dev

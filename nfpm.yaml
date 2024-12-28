@@ -1,20 +1,25 @@
 # check https://nfpm.goreleaser.com/configuration for detailed usage
-name: "minisign"
+name: "ghostty"
 arch: "amd64"
 platform: "linux"
 version: "${VERSION}"
 epoch: 1
 section: default
 provides:
-  - minisign
+  - ghostty
 maintainer: "Andrea Funtò <dihedron.dev@gmail.com>"
 description: |
-  Minisign is a dead simple tool to sign files and verify signatures.
-vendor: "Frank Denis (jedisct1)"
-homepage: "https://jedisct1.github.io/minisign/"
-license: "https://github.com/jedisct1/minisign/blob/master/LICENSE"
+  Ghostty is a terminal emulator that differentiates itself
+  by being fast, feature-rich, and native. While there are
+  many excellent terminal emulators available, they all force
+  you to choose between speed, features, or native UIs.
+  Ghostty provides all three.
+vendor: "Mitchell Hashimoto (mitchellh)"
+homepage: "https://ghostty.org/"
+license: "https://github.com/ghostty-org/ghostty/blob/main/LICENSE"
 contents:
-  - src: minisign-linux/x86_64/minisign
-    dst: /usr/local/bin/minisign
+  - src: ghostty-1.0.0/zig-out/
+    dst: /usr/local/ghostty/
+    type: tree
 rpm:
   packager: "Andrea Funtò <dihedron.dev@gmail.com>"
