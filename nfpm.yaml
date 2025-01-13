@@ -18,7 +18,7 @@ vendor: "Mitchell Hashimoto (mitchellh)"
 homepage: "https://ghostty.org/"
 license: "https://github.com/ghostty-org/ghostty/blob/main/LICENSE"
 contents:
-  - src: ghostty-1.0.0/zig-out/
+  - src: zig-out/
     dst: /usr/local/ghostty/
     type: tree
 rpm:
